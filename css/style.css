@@ -1,0 +1,239 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+#container {
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+@media (max-width: 1412px) {
+  #container {
+    margin-top: 150px;
+  }
+}
+@media (max-width: 958px) {
+  #container {
+    margin-top: 190px;
+  }
+}
+@media (max-width: 768px) {
+  #container {
+    margin-top: 240px;
+  }
+}
+@media (max-width: 630px) {
+  #container {
+    margin-top: 280px;
+  }
+}
+
+#navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background-color: #f0f0f0;
+  padding: 10px;
+  box-sizing: border-box;
+  transition: top 0.3s ease-in-out;
+  z-index: 10;
+}
+#navbar ul {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+#navbar a {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #2196f3;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+}
+#navbar a:hover {
+  background-color: #51adf6;
+}
+
+.category {
+  margin-bottom: 25px;
+}
+.category__title {
+  background-color: #2196f3;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: inline-block;
+  padding: 10px 30px 10px 20px;
+  text-align: left;
+  margin: 0 auto;
+  border-radius: 5px 15px 15px 5px;
+}
+.category__item {
+  display: flex;
+  padding: 10px;
+  margin-top: 15px;
+  align-items: center;
+  border: 1px solid #888;
+  border-radius: 6px;
+  gap: 10px;
+}
+.category__name {
+  font-weight: 600;
+  font-size: 14px;
+  width: 30%;
+  word-break: break-all;
+}
+.category .generated-text {
+  flex-grow: 1;
+  margin-left: 20px;
+  flex-basis: 0;
+  min-width: 0;
+  word-break: break-all;
+}
+
+.btn {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 500;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+}
+.btn:hover {
+  background-color: #6ec071;
+}
+.btn--copy {
+  background-color: #2196f3;
+}
+.btn--copy:hover {
+  background-color: #51adf6;
+}
+
+.toast {
+  visibility: hidden;
+  min-width: 100px;
+  margin-left: -125px;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+  padding: 16px;
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  bottom: 30px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.toast.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  gap: 10px;
+}
+.fab__btn {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.fab__btn svg {
+  width: 32px;
+  height: 32px;
+  fill: white;
+}
+.fab__btn:hover {
+  transform: scale(1.1);
+  background-color: #51adf6;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* overlay */
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+.modal__content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 600px;
+  max-height: 450px;
+  overflow-y: auto; /* Scroll if content overflows */
+  text-align: center;
+}
+.modal__title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.modal__text {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.modal ul {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 5px;
+}
+.modal li {
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.modal li:hover {
+  background-color: #f1f1f1;
+}
+.modal .close-btn {
+  margin-top: 10px;
+  padding: 10px 30px;
+}
+.modal .close-btn:hover {
+  background-color: #6ec071;
+}
+
+#info-modal .modal__content {
+  width: 300px;
+}

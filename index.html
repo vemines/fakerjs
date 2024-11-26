@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Faker.js</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav id="navbar">
+      <ul id="navigation"></ul>
+    </nav>
+
+    <!-- Template for the category container -->
+    <template id="category-template">
+      <div class="category">
+        <div class="category__title"></div>
+      </div>
+    </template>
+
+    <!-- Template for each category item -->
+    <template id="category-item-template">
+      <div class="category__item">
+        <span class="category__name"></span>
+        <button class="btn btn--generate">Generate</button>
+        <button class="btn btn--copy">Copy</button>
+        <span class="generated-text"></span>
+      </div>
+    </template>
+
+    <div id="container"></div>
+
+    <div class="fab">
+      <button class="fab__btn" id="info-modal-btn">
+        <svg class="fab__icon">
+          <use href="sprite.svg#info"></use>
+        </svg>
+      </button>
+      <button class="fab__btn" id="language-modal-btn">
+        <svg class="fab__icon">
+          <use href="sprite.svg#language"></use>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal" id="language-modal">
+      <div class="modal__content">
+        <div class="modal__title">Choose a Language</div>
+        <ul id="language-options"></ul>
+        <button class="btn close-btn" id="language-modal-close">Close</button>
+      </div>
+    </div>
+
+    <div class="modal" id="info-modal">
+      <div class="modal__content">
+        <div class="modal__title">INFO</div>
+        <div class="modal__text">FakerJS 9.2.0 playground</div>
+        <div class="modal__text">
+          API: <a href="https://fakerjs.dev/api/">https://fakerjs.dev/api/</a>
+        </div>
+        <div class="modal__text">
+          Github: <a href="https://github.com/faker-js/faker">https://github.com/faker-js/faker</a>
+        </div>
+
+        <div class="modal__text">Create by VeMines with love ❤️</div>
+        <button class="btn close-btn" id="info-modal-close">Close</button>
+      </div>
+    </div>
+
+    <script></script>
+    <script src="js/main.js"></script>
+    <script src="js/faker.js" type="module"></script>
+  </body>
+</html>
