@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="logo.svg" />
     <title>Faker.js</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -14,7 +15,9 @@
     <!-- Template for the category container -->
     <template id="category-template">
       <div class="category">
-        <div class="category__title"></div>
+        <div class="category__title">
+          <a target="_blank"></a>
+        </div>
       </div>
     </template>
 
@@ -24,6 +27,13 @@
         <span class="category__name"></span>
         <button class="btn btn--generate">Generate</button>
         <button class="btn btn--copy">Copy</button>
+        <span class="generated-text"></span>
+      </div>
+    </template>
+
+    <template id="category-item-customize-template">
+      <div class="category__item">
+        <span class="category__name"></span>
         <span class="generated-text"></span>
       </div>
     </template>

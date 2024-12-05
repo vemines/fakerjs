@@ -13,59 +13,13 @@ $border-color: #888;
 $btn-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 $btn-hover-lighten: 10;
 
-// row by view port
-$appbar: (
-  '6': 630px,
-  '5': 768px,
-  '4': 958px,
-  '3': 1412px,
-);
-@mixin ab-6 {
-  @media (max-width: map-get($appbar, '6')) {
-    @content;
-  }
-}
-@mixin ab-5 {
-  @media (max-width: map-get($appbar, '5')) {
-    @content;
-  }
-}
-@mixin ab-4 {
-  @media (max-width: map-get($appbar, '4')) {
-    @content;
-  }
-}
-@mixin ab-3 {
-  @media (max-width: map-get($appbar, '3')) {
-    @content;
-  }
-}
-
 body {
   font-family: sans-serif;
 }
 
-#container {
-  max-width: 1000px;
-  margin: 0 auto;
-  margin-top: 100px;
-  @include ab-3 {
-    margin-top: 150px;
-  }
-  @include ab-4 {
-    margin-top: 190px;
-  }
-  @include ab-5 {
-    margin-top: 240px;
-  }
-  @include ab-6 {
-    margin-top: 280px;
-  }
-}
-
-// Header
+// Navbar
 #navbar {
-  position: fixed;
+  position: sticky;
   width: 100%;
   top: 0;
   background-color: $bg-color;
@@ -95,22 +49,41 @@ body {
   }
 }
 
+#container {
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
 // Category
 .category {
   margin-bottom: 25px;
 
   &__title {
     background-color: $primary;
-    color: white;
     padding: 10px;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
     display: inline-block;
     padding: 10px 30px 10px 20px;
     text-align: left;
     margin: 0 auto;
     border-radius: 5px 15px 15px 5px;
+
+    a {
+      color: white;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  }
+
+  &.customize {
+    button {
+      margin-top: 1rem;
+      &:not(:last-child) {
+        margin-right: 1rem;
+      }
+    }
   }
 
   &__item {
@@ -249,10 +222,12 @@ $svg-size: 32px;
     overflow-y: auto; /* Scroll if content overflows */
     text-align: center;
   }
+
   &__title {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 12px;
+    text-decoration: none;
   }
 
   &__text {
