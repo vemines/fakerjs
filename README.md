@@ -4,7 +4,7 @@ Welcome to the Faker.js Playground! This project is a web-based application that
 
 ## Demo
 
-[Demo link:](https://vemines.github.io/fakerjs/)
+[Demo link](https://vemines.github.io/fakerjs/)
 
 ## Table of Contents
 
@@ -29,7 +29,7 @@ Welcome to the Faker.js Playground! This project is a web-based application that
 
 ## Custom
 
-For custom common category. Edit [faker.js](js/faker.js) line 167
+For custom common category. Edit [faker.js](js/faker.js#166)
 Added
 
 ```javascript
@@ -50,4 +50,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - [Faker.js Doc](https://fakerjs.dev/) - The library used for generating fake data.
 - [Faker.js Github](https://github.com/faker-js/faker) - The library used for generating fake data.
-- Created by VeMines with love ❤️
+
+- Created by VeMines with love ❤️. If you like this project please star ⭐ it

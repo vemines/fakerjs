@@ -70,6 +70,7 @@ import {
   fakerZH_TW,
   fakerZU_ZA,
 } from '../dist/index.js';
+
 const languageMap = {
   af_ZA: { name: 'Afrikaans (South Africa)', faker: fakerAF_ZA },
   ar: { name: 'Arabic', faker: fakerAR },
@@ -164,6 +165,17 @@ for (const locale in languageMap) {
 
 function setData(faker) {
   data = {
+    _customize: {
+      uuid: faker.string.uuid,
+      fullName: faker.person.lastName,
+      bio: faker.person.bio,
+      sex: faker.person.sex,
+      phone: faker.phone.number,
+      job: faker.person.jobTitle,
+      workAt: faker.company.name,
+      createAt: faker.date.past,
+      updateAt: faker.date.past,
+    },
     person: {
       'person.bio': faker.person.bio,
       'person.lastName': faker.person.lastName,
@@ -491,13 +503,77 @@ function setData(faker) {
   };
 }
 
-for (const category in data) {
-  const container = document.getElementById('container');
-  const navigation = document.getElementById('navigation');
-  const template = document.getElementById('category-template');
+function outputFormat(v) {
+  if (Date.parse(v)) return v.toISOString();
+  return v;
+}
+const docUrl = (s) => {
+  return 'https://fakerjs.dev/api/' + s + '.html';
+};
+
+const container = document.getElementById('container');
+const navigation = document.getElementById('navigation');
+const template = document.getElementById('category-template');
+
+function createFuncItem(funcName, category) {
+  const categoryItem = document
+    .getElementById('category-item-template')
+    .content.firstElementChild.cloneNode(true);
+  if (!template) return;
+
+  // set category name / text
+  const categoryName = categoryItem.querySelector('.category__name');
+  categoryName.textContent = funcName;
+
+  const generatedText = categoryItem.querySelector('.generated-text');
+  try {
+    generatedText.textContent = outputFormat(data[category][funcName]());
+    // set event category button generate / copy
+    const generateButton = categoryItem.querySelector('.btn--generate');
+    generateButton.addEventListener('click', () => {
+      const genResult = outputFormat(data[category][funcName]());
+      generatedText.textContent = genResult;
+    });
+  } catch (e) {
+    // debugger;
+  }
+
+  const copyButton = categoryItem.querySelector('.btn--copy');
+  copyButton.addEventListener('click', () => {
+    copyToClipboard(generatedText.textContent);
+  });
+
+  return categoryItem;
+}
+
+function createCustomizeItem(funcName, category) {
+  const categoryItem = document
+    .getElementById('category-item-customize-template')
+    .content.firstElementChild.cloneNode(true);
+  if (!template) return;
+
+  // set category name / text
+  const categoryName = categoryItem.querySelector('.category__name');
+  categoryName.textContent = funcName;
+
+  const generatedText = categoryItem.querySelector('.generated-text');
+  const genResult = outputFormat(data[category][funcName]());
+  generatedText.textContent = genResult;
+
+  return { categoryItem, genResult };
+}
+
+for (let category in data) {
   if (!template || !navigation) break;
 
-  // create nav item and set data
+  const isCustomize = category[0] === '_';
+  let originCategory = '';
+  if (isCustomize) {
+    originCategory = category;
+    category = category.substring(1);
+  }
+
+  // create navbar item
   const navItem = document.createElement('li');
   const navLink = document.createElement('a');
   navLink.href = `#${category}`;
@@ -514,38 +590,59 @@ for (const category in data) {
 
   // set title category
   const categoryTitle = categoryElement.querySelector('.category__title');
-  categoryTitle.textContent = category.toUpperCase();
+  const categoryLink = categoryTitle.querySelector('a');
+  categoryLink.textContent = category.toUpperCase();
+  if (!isCustomize) categoryLink.href = docUrl(category);
 
-  for (const func in data[category]) {
-    // clone category-item element from template
-    const categoryItem = document
-      .getElementById('category-item-template')
-      .content.firstElementChild.cloneNode(true);
-    if (!template) break;
+  if (isCustomize) {
+    categoryElement.classList.add('customize');
 
-    // set category name / text
-    const categoryName = categoryItem.querySelector('.category__name');
-    categoryName.textContent = func;
+    const funcList = [];
+    const funcNameList = [];
+    const categoryItemList = [];
+    let jsonData = {};
 
-    const generatedText = categoryItem.querySelector('.generated-text');
-    try {
-      generatedText.textContent = data[category][func]();
-      // set event category button generate / copy
-      const generateButton = categoryItem.querySelector('.btn--generate');
-      generateButton.addEventListener('click', () => {
-        generatedText.textContent = data[category][func]();
-      });
-    } catch (e) {
-      // debugger;
+    for (const funcName in data[originCategory]) {
+      const { categoryItem, genResult } = createCustomizeItem(funcName, originCategory);
+      categoryElement.appendChild(categoryItem);
+
+      funcList.push(data[originCategory][funcName]);
+      categoryItemList.push(categoryItem);
+      funcNameList.push(funcName);
+      jsonData[funcName] = genResult;
     }
 
-    const copyButton = categoryItem.querySelector('.btn--copy');
-    copyButton.addEventListener('click', () => {
-      copyToClipboard(generatedText.textContent);
+    // add generate button and customize to customize category
+    const generateButton = document.createElement('button');
+    const copyButton = document.createElement('button');
+    generateButton.className = 'btn btn--generate';
+    copyButton.className = 'btn btn--copy';
+    generateButton.textContent = 'Generate';
+    copyButton.textContent = 'Copy Json';
+
+    // add generate event
+    generateButton.addEventListener('click', () => {
+      const length = funcList.length === categoryItemList.length ? funcList.length : 0;
+      for (let i = 0; i < length; i++) {
+        const genResult = outputFormat(funcList[i]());
+        categoryItemList[i].querySelector('.generated-text').textContent = genResult;
+        jsonData[funcNameList[i]] = genResult;
+      }
     });
 
-    // add to category element
-    categoryElement.appendChild(categoryItem);
+    // add copy event
+    copyButton.addEventListener('click', () => {
+      copyToClipboard(JSON.stringify(jsonData, null, 2));
+    });
+
+    // add 2 buttons to dom
+    categoryElement.appendChild(generateButton);
+    categoryElement.appendChild(copyButton);
+  } else {
+    for (const funcName in data[category]) {
+      const categoryItem = createFuncItem(funcName, category);
+      categoryElement.appendChild(categoryItem);
+    }
   }
 
   // update dom category
@@ -562,18 +659,16 @@ links.forEach(function (link) {
     const targetId = link.getAttribute('href');
     const targetElement = document.querySelector(targetId);
 
-    const screenWidth = window.innerWidth;
-    let topScrollOffset = 100; // for scroll up pass fixed navbar
-    if (screenWidth < 1142) topScrollOffset = 150;
-    if (screenWidth < 960) topScrollOffset = 200;
-    if (screenWidth < 770) topScrollOffset = 250;
-    if (screenWidth < 625) topScrollOffset = 300;
-    if (screenWidth < 540) topScrollOffset = 340;
+    const navbar = document.getElementById('navbar');
+    let navbarHeight = 0;
+    if (navbar) {
+      navbarHeight = navbar.offsetHeight;
+    }
 
     if (targetElement) {
       const offsetTop = targetElement.offsetTop; // Get the target element's position from the top
       const scrollOptions = {
-        top: offsetTop - topScrollOffset,
+        top: offsetTop - navbarHeight,
       };
       window.scrollTo(scrollOptions);
     }
