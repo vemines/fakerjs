@@ -143,14 +143,18 @@ const languageMap = {
   zu_ZA: { name: 'Zulu (South Africa)', faker: fakerZU_ZA },
 };
 
-const optionElement = document.getElementById('language-options');
-const modal = document.getElementById('language-modal');
-
 let faker = fakerEN;
 let data = {};
 setData(faker);
 
-for (const locale in languageMap) {
+const sortedLanguageMap = Object.fromEntries(
+  Object.entries(languageMap).sort(([, a], [, b]) => a.name.localeCompare(b.name)),
+);
+
+const modal = document.getElementById('language-modal');
+const optionElement = document.getElementById('language-options');
+
+for (const locale in sortedLanguageMap) {
   const languageElement = document.createElement('li');
   languageElement.textContent = languageMap[locale].name;
 
@@ -158,6 +162,7 @@ for (const locale in languageMap) {
     faker = languageMap[locale].faker;
     setData(faker);
     modal.style.display = 'none';
+    changeCustomizeButtonEvent();
   });
 
   optionElement.appendChild(languageElement);
@@ -504,9 +509,15 @@ function setData(faker) {
 }
 
 function outputFormat(v) {
-  if (Date.parse(v)) return v.toISOString();
+  try {
+    if (Date.parse(v)) return v.toISOString();
+  } catch (_) {
+    return v;
+  }
+
   return v;
 }
+
 const docUrl = (s) => {
   return 'https://fakerjs.dev/api/' + s + '.html';
 };
@@ -535,6 +546,7 @@ function createFuncItem(funcName, category) {
       generatedText.textContent = genResult;
     });
   } catch (e) {
+    console.log(e.message, funcName);
     // debugger;
   }
 
@@ -563,6 +575,39 @@ function createCustomizeItem(funcName, category) {
   return { categoryItem, genResult };
 }
 
+function changeCustomizeButtonEvent() {
+  for (let category in data) {
+    const isCustomize = category[0] === '_';
+    if (isCustomize) {
+      const customizeElement = document.getElementById(category);
+      if (!customizeElement) next();
+
+      const generateButton = customizeElement.querySelector('.btn--generate');
+      if (!generateButton) next();
+
+      const funcList = [];
+      const funcNameList = [];
+      const categoryItemList = customizeElement.querySelectorAll('.category__item');
+      let jsonData = {};
+
+      for (const funcName in data[category]) {
+        funcList.push(data[category][funcName]);
+        funcNameList.push(funcName);
+      }
+
+      generateButton.onclick = () => {
+        const length = funcList.length === categoryItemList.length ? funcList.length : 0;
+
+        for (let i = 0; i < length; i++) {
+          const genResult = outputFormat(funcList[i]());
+          categoryItemList[i].querySelector('.generated-text').textContent = genResult;
+          jsonData[funcNameList[i]] = genResult;
+        }
+      };
+    }
+  }
+}
+
 for (let category in data) {
   if (!template || !navigation) break;
 
@@ -576,7 +621,7 @@ for (let category in data) {
   // create navbar item
   const navItem = document.createElement('li');
   const navLink = document.createElement('a');
-  navLink.href = `#${category}`;
+  navLink.href = isCustomize ? `#${originCategory}` : `#${category}`;
   navLink.textContent = category.toUpperCase();
   navLink.className = 'nav-link';
 
@@ -596,6 +641,7 @@ for (let category in data) {
 
   if (isCustomize) {
     categoryElement.classList.add('customize');
+    categoryElement.id = originCategory;
 
     const funcList = [];
     const funcNameList = [];
@@ -621,15 +667,14 @@ for (let category in data) {
     copyButton.textContent = 'Copy Json';
 
     // add generate event
-    generateButton.addEventListener('click', () => {
+    generateButton.onclick = () => {
       const length = funcList.length === categoryItemList.length ? funcList.length : 0;
       for (let i = 0; i < length; i++) {
         const genResult = outputFormat(funcList[i]());
         categoryItemList[i].querySelector('.generated-text').textContent = genResult;
         jsonData[funcNameList[i]] = genResult;
       }
-    });
-
+    };
     // add copy event
     copyButton.addEventListener('click', () => {
       copyToClipboard(JSON.stringify(jsonData, null, 2));
