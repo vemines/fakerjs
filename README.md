@@ -29,7 +29,7 @@ You can view a live demo of the project at: [Live demo](https://vemines.github.i
 
 ## Custom
 
-For custom common category. Edit [faker.js](js/faker.js#166)
+For custom common category. Edit function "setData(faker)" in [faker.js](js/faker.js)
 Added
 
 ```javascript
