@@ -4,7 +4,7 @@ Welcome to the Faker.js Playground! This project is a web-based application that
 
 ## Demo
 
-[Demo link](https://vemines.github.io/fakerjs/)
+You can view a live demo of the project at: [Live demo](https://vemines.github.io/fakerjs/)
 
 ## Table of Contents
 
